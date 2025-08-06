@@ -1,7 +1,13 @@
 {
   "manifest_version": 3,
   "name": "WebM Remuxer",
-  "version": "1.0",
+  "version": "1.1",
+
+  "browser_specific_settings": {
+  "gecko": {
+    "id": "{d250cbdc-facb-422a-b5fb-b34af3dfd3c7}"
+  }
+},
 
   "description": "Recontainerizes HackerOne WebM files to restore duration and playback controls",
   "homepage_url": "https://github.com/trybadisch/WebM-Remuxer",
@@ -10,7 +16,7 @@
   "web_accessible_resources": [
     {
       "resources": ["assets/**"],
-      "matches": ["https://hackerone.com/reports/*"]
+      "matches": ["https://hackerone.com/*"]
     }
   ],
 
@@ -26,7 +32,7 @@
 
   "content_scripts": [
     {
-      "matches": ["https://hackerone.com/reports/*"],
+      "matches": ["https://hackerone.com/*"],
       "js": ["download.js"],
       "run_at": "document_idle"
     }
