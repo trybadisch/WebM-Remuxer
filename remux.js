@@ -95,7 +95,7 @@ chrome.webRequest.onHeadersReceived.addListener(
     return { responseHeaders: headers };
   },
   {
-    urls: ["<all_urls>"],
+    urls: ["https://hackerone.com/*", "https://*.amazonaws.com/*"],
     types: ["main_frame", "sub_frame"]
   },
   ["blocking", "responseHeaders"]
