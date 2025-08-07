@@ -1,6 +1,6 @@
 # WebM-Remuxer
 
-Extension to recontainerize HackerOne WebM files to restore duration and playback controls.
+Firefox extension to recontainerize HackerOne WebM files to restore duration and playback controls.
 
 ## About this project
 
