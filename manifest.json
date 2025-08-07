@@ -4,10 +4,10 @@
   "version": "1.3",
 
   "browser_specific_settings": {
-  "gecko": {
-    "id": "{d250cbdc-facb-422a-b5fb-b34af3dfd3c7}"
-  }
-},
+    "gecko": {
+      "id": "{d250cbdc-facb-422a-b5fb-b34af3dfd3c7}"
+    }
+  },
 
   "description": "Recontainerizes HackerOne WebM files to restore duration and playback controls",
   "homepage_url": "https://github.com/trybadisch/WebM-Remuxer",
@@ -42,4 +42,3 @@
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'"
   }
 }
-
