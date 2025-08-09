@@ -14,6 +14,8 @@ ffmpeg -i no-duration.webm -c copy fixed-duration.webm
 
 This Firefox extension leverages the [WASM port of ffmpeg](https://github.com/ffmpegwasm/ffmpeg.wasm) to perform the WebM remuxing in-browser, and replaces the broken WebMs with the fixed blobs in the embedded player, thus fixing the duration and implementing playback controls. Additionally, it creates additional download links to the fixed WebMs, in case that they need to be downloaded locally.
 
+![Screenshot](screenshot.png)
+
 As remuxing does not require reencoding any files, the process is almost seamless, without significant performance penalties for the browser. However, since H1 loads its resources dynamically while navigating a report, the extension requires constant monitoring of active H1 tabs to detect any changes to the DOM where a WebM file may have been included. This is the most resource intensive task, although I have not detected a significant performance downgrade in my testing.
 
 ## Installation
