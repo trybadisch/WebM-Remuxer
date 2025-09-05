@@ -29,3 +29,11 @@ The extension .xpi must be installed as a local file from `about:addons`. It is 
 - `download.js`: Creates an observer to monitor the DOM. When it detects a block containing a WebM file, it passes its source to `remux.js`. After the file comes back from remuxing, it replaces the video source with the remuxed data blob and includes download links to the file in the DOM.
 - `remux.js`: Imports ffmpeg-wasm components from `/assets/` and applies `"ffmpeg -i", "input.webm", "-c", "copy", "output.webm"` to files sent by `download.js`. It works as a background script, and communication with `download.js` is achieved via sendMessage listener.
 - `/assets/` folder: Contains the `ffmpeg-wasm` vanilla JavaScript implementation, as well as the `/assets/core/package/dist/esm/ffmpeg-core.wasm` WebAssembly.
+
+## Changelog
+
+### Version 1.5
+- Remux mkv attachments to mp4 in order to allow HTML embedding, since matroska files are not supported in video tags
+
+### Version 1.4
+- Add an Embed button for video attachments not embedded in a report
