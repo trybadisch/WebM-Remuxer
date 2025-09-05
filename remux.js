@@ -34,13 +34,31 @@ async function remuxWebMFromURL(url) {
   }
 }
 
+async function remuxMKVFromURL(url) {
+  try {
+    const ffmpeg = await ensureFFmpegLoaded();
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const file = new File([blob], "input.mkv", { type: "video/x-matroska" });
+
+    await ffmpeg.writeFile("input.mkv", await fetchFile(file));
+    await ffmpeg.exec(["-i", "input.mkv", "-c", "copy", "output.mp4"]);
+    const outputData = await ffmpeg.readFile("output.mp4");
+    return new Blob([outputData.buffer], { type: "video/mp4" });
+  } catch (err) {
+    console.error("Remuxing failed:", err);
+    return null;
+  }
+}
+
+
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === "remuxWebM" && msg.url) {
     remuxWebMFromURL(msg.url)
       .then((blob) => {
         if (!blob) {
-          sendResponse({ error: "Failed to remux: Blob is null" });
+          sendResponse({ error: "Failed to remux WebM: Blob is null" });
         } else {
           // Convert Blob to ArrayBuffer and return it
           blob.arrayBuffer().then((buffer) => {
@@ -55,4 +73,24 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
     return true; // Keep channel open for async sendResponse
   }
+
+  else if (msg.action === "remuxMKV" && msg.url) {
+    remuxMKVFromURL(msg.url)
+      .then((blob) => {
+        if (!blob) {
+          sendResponse({ error: "Failed to remux MKV: Blob is null" });
+        } else {
+          blob.arrayBuffer().then((buffer) => {
+            sendResponse({ buffer });
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("[remux.js] Remux error:", err);
+        sendResponse({ error: err.message || "Unknown error" });
+      });
+
+    return true;
+  }
+
 });

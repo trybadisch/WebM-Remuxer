@@ -128,6 +128,15 @@ handleMutations();
     return ct ? ct.toLowerCase().startsWith('video/webm') : (href.toLowerCase().includes('.webm'));
   }
 
+  function isMKVByContentType(href) {
+    const ct = getResponseContentType(href);
+    if (ct) {
+      const lower = ct.toLowerCase();
+      if (lower.includes('video/x-matroska') || lower.includes('matroska')) return true;
+    }
+    return href.toLowerCase().includes('.mkv');
+  }
+
   async function fetchBlob(url) {
     const res = await fetch(url);
     if (!res.ok) throw new Error('Network error fetching attachment');
@@ -144,6 +153,17 @@ handleMutations();
     // Fallback: fetch original if remux not available
     return await fetchBlob(url);
   }
+
+async function getFixedMKVBlob(url) {
+  // Remux mkv to mp4
+  const response = await chrome.runtime.sendMessage({ action: "remuxMKV", url });
+  if (response?.buffer) {
+    return new Blob([new Uint8Array(response.buffer)], { type: "video/mp4" });
+  }
+  // Fallback: fetch original if remux not available
+  return await fetchBlob(url);
+}
+
 
   function makeEmbedLink(anchor) {
     const embed = document.createElement('a');
@@ -177,6 +197,8 @@ handleMutations();
       let blob;
       if (isWebMByContentType(href)) {
         blob = await getFixedWebMBlob(href);
+      } else if (isMKVByContentType(href)) {
+        blob = await getFixedMKVBlob(href);
       } else {
         blob = await fetchBlob(href);
       }
